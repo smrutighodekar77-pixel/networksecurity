@@ -1,0 +1,8 @@
+[2026-01-08 19:13:42,700] 25 root - INFO - Initiate the data ingestion
+[2026-01-08 19:13:46,184] 27 root - INFO - Data Initiation Completed
+[2026-01-08 19:13:46,185] 24 root - INFO - Initializing DataValidation
+[2026-01-08 19:13:46,192] 37 root - INFO - Schema loaded successfully
+[2026-01-08 19:13:46,192] 31 root - INFO - Initiate the data Validation
+[2026-01-08 19:13:46,192] 109 root - INFO - Starting data validation
+[2026-01-08 19:13:46,221] 54 root - INFO - Expected columns count: 31
+[2026-01-08 19:13:46,221] 55 root - INFO - Dataframe columns count: 31
