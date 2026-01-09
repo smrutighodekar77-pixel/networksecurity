@@ -1,6 +1,0 @@
-[2026-01-08 19:28:38,861] 25 root - INFO - Initiate the data ingestion
-[2026-01-08 19:28:41,416] 27 root - INFO - Data Initiation Completed
-[2026-01-08 19:28:41,417] 24 root - INFO - Initializing DataValidation
-[2026-01-08 19:28:41,422] 36 root - INFO - Schema loaded successfully
-[2026-01-08 19:28:41,422] 31 root - INFO - Initiate the data Validation
-[2026-01-08 19:28:41,422] 112 root - INFO - Starting data validation
