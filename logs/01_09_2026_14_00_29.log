@@ -1,0 +1,26 @@
+[2026-01-09 14:00:30,489] 23 root - INFO - Initiate the data ingestion
+[2026-01-09 14:00:33,351] 25 root - INFO - Data Initiation Completed
+[2026-01-09 14:00:33,352] 24 root - INFO - Initializing DataValidation
+[2026-01-09 14:00:33,357] 36 root - INFO - Schema loaded successfully
+[2026-01-09 14:00:33,358] 29 root - INFO - Initiate the data Validation
+[2026-01-09 14:00:33,358] 111 root - INFO - Starting data validation
+[2026-01-09 14:00:33,388] 56 root - INFO - Expected columns count: 31
+[2026-01-09 14:00:33,388] 57 root - INFO - Dataframe columns count: 31
+[2026-01-09 14:00:33,530] 126 root - INFO - Data validation completed successfully
+[2026-01-09 14:00:33,532] 31 root - INFO - data validation completed
+[2026-01-09 14:00:33,533] 41 root - INFO - data Transformation started
+[2026-01-09 14:00:33,533] 66 root - INFO - Starting data transformation
+[2026-01-09 14:00:33,555] 49 root - INFO - Creating data transformer object
+[2026-01-09 14:00:33,572] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 14:00:33,575] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 14:00:33,575] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 14:00:33,578] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 14:00:33,579] 45 root - INFO - data Transformation completed
+[2026-01-09 14:00:33,579] 47 root - INFO - Model Training sstared
+[2026-01-09 14:00:33,579] 43 root - INFO - MLflow tracking URI set to file:///C:/Users/Smruti/OneDrive/Desktop/Data Science Bootcamp/Udemy final/Network security/mlruns
+[2026-01-09 14:00:33,579] 63 root - INFO - Starting model training
+[2026-01-09 14:03:46,707] 105 root - INFO - Best model selected: Random Forest
+[2026-01-09 14:03:47,024] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 14:03:47,072] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 14:03:47,072] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 14:03:47,114] 63 root - INFO - Exited the save_object method of MainUtils class

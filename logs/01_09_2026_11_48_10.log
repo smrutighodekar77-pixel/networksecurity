@@ -1,0 +1,28 @@
+[2026-01-09 11:48:11,016] 23 root - INFO - Initiate the data ingestion
+[2026-01-09 11:48:13,090] 25 root - INFO - Data Initiation Completed
+[2026-01-09 11:48:13,090] 24 root - INFO - Initializing DataValidation
+[2026-01-09 11:48:13,096] 36 root - INFO - Schema loaded successfully
+[2026-01-09 11:48:13,096] 29 root - INFO - Initiate the data Validation
+[2026-01-09 11:48:13,096] 111 root - INFO - Starting data validation
+[2026-01-09 11:48:13,123] 56 root - INFO - Expected columns count: 31
+[2026-01-09 11:48:13,123] 57 root - INFO - Dataframe columns count: 31
+[2026-01-09 11:48:13,261] 126 root - INFO - Data validation completed successfully
+[2026-01-09 11:48:13,264] 31 root - INFO - data validation completed
+[2026-01-09 11:48:13,264] 41 root - INFO - data Transformation started
+[2026-01-09 11:48:13,265] 66 root - INFO - Starting data transformation
+[2026-01-09 11:48:13,293] 49 root - INFO - Creating data transformer object
+[2026-01-09 11:48:13,310] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 11:48:13,313] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 11:48:13,314] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 11:48:13,316] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 11:48:13,319] 45 root - INFO - data Transformation completed
+[2026-01-09 11:48:13,319] 47 root - INFO - Model Training sstared
+[2026-01-09 11:48:13,319] 46 root - INFO - Model training started
+[2026-01-09 11:53:42,790] 115 root - INFO - Best model selected: Random Forest
+[2026-01-09 11:53:43,143] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 11:53:43,192] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 11:53:43,192] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 11:53:43,239] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 11:53:43,240] 157 root - INFO - Model trainer artifact created: ModelTrainerArtifact(trained_model_file_path='Artifacts\\01_09_2026_11_48_10\\model_trainer\\trained_model\\model.pkl', train_metric_artifact=ClassificationMetricArtifact(f1_score=0.9914876368058371, precision_score=0.9892821031344793, recall_score=0.9937030266097908), test_metric_artifact=ClassificationMetricArtifact(f1_score=0.9752593774940144, precision_score=0.960691823899371, recall_score=0.9902755267423015))
+[2026-01-09 11:53:43,245] 65 root - INFO - Model training completed
+[2026-01-09 11:53:43,247] 52 root - INFO - Model Training artifact created

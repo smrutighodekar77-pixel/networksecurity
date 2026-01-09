@@ -1,0 +1,24 @@
+[2026-01-09 15:24:19,976] 19 root - INFO - Starting data ingestion
+[2026-01-09 15:24:22,665] 21 root - INFO - Data ingestion completed: DataIngestionArtifact(train_file_path='Artifacts\\01_09_2026_15_24_18\\data_ingestion\\ingested\\train.csv', test_file_path='Artifacts\\01_09_2026_15_24_18\\data_ingestion\\ingested\\test.csv')
+[2026-01-09 15:24:22,665] 24 root - INFO - Initializing DataValidation
+[2026-01-09 15:24:22,678] 36 root - INFO - Schema loaded successfully
+[2026-01-09 15:24:22,678] 26 root - INFO - Starting data validation
+[2026-01-09 15:24:22,678] 111 root - INFO - Starting data validation
+[2026-01-09 15:24:22,707] 56 root - INFO - Expected columns count: 31
+[2026-01-09 15:24:22,707] 57 root - INFO - Dataframe columns count: 31
+[2026-01-09 15:24:22,909] 126 root - INFO - Data validation completed successfully
+[2026-01-09 15:24:22,911] 28 root - INFO - Data validation completed: DataValidationArtifact(validation_status=True, valid_train_file_path='Artifacts\\01_09_2026_15_24_18\\data_validation\\valid\\train.csv', valid_test_file_path='Artifacts\\01_09_2026_15_24_18\\data_validation\\valid\\test.csv', drift_report_file_path='Artifacts\\01_09_2026_15_24_18\\data_validation\\drift_report\\report.yaml')
+[2026-01-09 15:24:22,911] 33 root - INFO - Starting data transformation
+[2026-01-09 15:24:22,911] 66 root - INFO - Starting data transformation
+[2026-01-09 15:24:22,936] 49 root - INFO - Creating data transformer object
+[2026-01-09 15:24:22,952] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 15:24:22,957] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 15:24:22,957] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 15:24:22,957] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 15:24:22,961] 35 root - INFO - Data transformation completed: DataTransformationArtifact(transformed_object_file_path='Artifacts\\01_09_2026_15_24_18\\data_transformation\\transformed_object\\preprocessing.pkl', transformed_train_file_path='Artifacts\\01_09_2026_15_24_18\\data_transformation\\transformed\\train.npy', transformed_test_file_path='Artifacts\\01_09_2026_15_24_18\\data_transformation\\transformed\\test.npy')
+[2026-01-09 15:24:22,992] 40 root - INFO - Starting model training
+[2026-01-09 15:24:22,992] 43 root - INFO - Model training started
+[2026-01-09 15:24:29,567] 59 root - INFO - Entered the save_object method of MainUtils class
+[2026-01-09 15:24:29,594] 63 root - INFO - Exited the save_object method of MainUtils class
+[2026-01-09 15:24:29,594] 91 root - INFO - Model training completed successfully
+[2026-01-09 15:24:29,598] 42 root - INFO - Model training completed: ModelTrainerArtifact(trained_model_file_path='Artifacts\\01_09_2026_15_24_18\\model_trainer\\trained_model\\model.pkl', train_metric_artifact=ClassificationMetricArtifact(f1_score=0.9918577745240081, precision_score=0.9918592344966322, recall_score=0.9918588873812755), test_metric_artifact=ClassificationMetricArtifact(f1_score=0.9687570467560918, precision_score=0.9689341578256229, recall_score=0.9687924016282226))
