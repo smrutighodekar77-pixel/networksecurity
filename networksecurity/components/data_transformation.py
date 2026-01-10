@@ -130,6 +130,7 @@ class DataTransformation:
                 self.data_transformation_config.transformed_object_file_path,
                 preprocessor_object
             )
+            save_object( "final_model/preprocessor.pkl", preprocessor_object,)
 
             # Optional final model copy
             os.makedirs("final_model", exist_ok=True)

@@ -1,0 +1,111 @@
+import os
+import sys
+import io
+import certifi
+import pandas as pd
+from dotenv import load_dotenv
+
+from fastapi import FastAPI, File, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import RedirectResponse, JSONResponse
+
+from networksecurity.utils.main_utils.utils import load_object
+from networksecurity.utils.ml_utils.model.estimator import NetworkModel
+from networksecurity.pipeline.training_pipeline import TrainingPipeline
+from networksecurity.exception.exception import NetworkSecurityException
+from networksecurity.logging.logger import logging
+
+# Load env
+load_dotenv()
+mongo_db_url = os.getenv("MONGODB_URL_KEY")
+
+# MongoDB (only if needed)
+import pymongo
+ca = certifi.where()
+client = pymongo.MongoClient(mongo_db_url, tlsCAFile=ca)
+
+# FastAPI app
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+# Load model & preprocessor
+try:
+    preprocessor = load_object("final_model/preprocessor.pkl")
+    model = load_object("final_model/model.pkl")
+    network_model = NetworkModel(preprocessor=preprocessor, model=model)
+    logging.info("Model and preprocessor loaded successfully")
+except Exception as e:
+    logging.error(e)
+    network_model = None
+
+
+@app.get("/")
+def index():
+    return RedirectResponse(url="/docs")
+
+
+@app.get("/train")
+def train_route():
+    try:
+        pipeline = TrainingPipeline()
+        pipeline.run_pipeline()
+        return {"status": "Training completed successfully"}
+    except Exception as e:
+        raise NetworkSecurityException(e, sys)
+
+
+@app.post("/predict")
+async def predict_route(file: UploadFile = File(...)):
+    try:
+        if network_model is None:
+            return JSONResponse(
+                status_code=500,
+                content={"error": "Model not loaded"}
+            )
+
+        # Read uploaded file
+        contents = await file.read()
+
+        if contents is None or len(contents) == 0:
+            return JSONResponse(
+                status_code=400,
+                content={"error": "Uploaded CSV is empty"}
+            )
+
+        # Convert CSV → DataFrame
+        df = pd.read_csv(io.StringIO(contents.decode("utf-8")))
+
+        # Run prediction
+        predictions = network_model.predict(df)
+
+        # Add prediction column
+        df["prediction"] = predictions
+
+        # Create output folder if not exists
+        output_dir = "prediction_output"
+        os.makedirs(output_dir, exist_ok=True)
+
+        # Save output CSV
+        output_path = os.path.join(output_dir, "output.csv")
+        df.to_csv(output_path, index=False)
+
+        return {
+            "status": "success",
+            "rows": len(df),
+            "output_file": output_path,
+            "predictions": predictions.tolist()
+        }
+
+    except Exception as e:
+        logging.error(e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": str(e)}
+        )
