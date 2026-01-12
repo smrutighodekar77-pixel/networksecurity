@@ -32,10 +32,10 @@ jobs:
       - name: Install Utilities
         run: |
           sudo apt-get update
-          sudo apt-get install -y jq unzip
+          sudo apt-get install -y jq unzip curl
 
       - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
+        uses: aws-actions/configure-aws-credentials@v1
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -45,7 +45,7 @@ jobs:
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Build, tag, and push image to Amazon ECR
+      - name: Build, tag, and push Docker image to ECR
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_NAME }}
@@ -55,7 +55,11 @@ jobs:
           echo "Repository: $ECR_REPOSITORY"
           echo "Tag: $IMAGE_TAG"
 
-          docker build -t ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG} .
-          docker push ${ECR_REGISTRY}/${ECR_REPOSITORY}:${IMAGE_TAG}
+          # Build Docker image
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 
+          # Push Docker image to ECR
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
+          # Output image URL
+          echo "IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
