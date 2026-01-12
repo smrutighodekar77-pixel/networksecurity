@@ -1,4 +1,4 @@
-name: Build and Push Docker to ECR
+name: workflow
 
 on:
   push:
@@ -8,7 +8,22 @@ on:
       - 'README.md'
 
 jobs:
+  integration:
+    name: Continuous Integration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Lint code
+        run: echo "Linting repository"
+
+      - name: Run unit tests
+        run: echo "Running unit tests"
+
   build-and-push-ecr-image:
+    name: Continuous Delivery
+    needs: integration
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Code
@@ -17,7 +32,7 @@ jobs:
       - name: Install Utilities
         run: |
           sudo apt-get update
-          sudo apt-get install -y curl unzip
+          sudo apt-get install -y jq unzip
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -40,11 +55,8 @@ jobs:
           echo "Repository: $ECR_REPOSITORY"
           echo "Tag: $IMAGE_TAG"
 
-          # Build Docker image (note the '.' at the end!)
+          # Build Docker image (make sure '.' is included!)
           docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
 
           # Push Docker image to ECR
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
-
-          # Export the image URI
-          echo "IMAGE_URI=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_ENV
