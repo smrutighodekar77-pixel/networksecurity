@@ -1,20 +1,18 @@
 FROM python:3.10-slim-bullseye
 
-# Set working directory
 WORKDIR /app
 
-# Copy requirements first (Docker cache optimization)
 COPY requirements.txt .
 
-# Upgrade pip and install Python dependencies
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends curl unzip && \
+    rm -rf /var/lib/apt/lists/*
+
 RUN pip install --no-cache-dir --upgrade pip && \
     pip install --no-cache-dir -r requirements.txt
 
-# Copy application code
 COPY . .
 
-# Expose FastAPI port
-EXPOSE 8080
+EXPOSE 8000
 
-# Run FastAPI app
-CMD ["python", "app.py"]
+CMD ["uvicorn", "app:app", "--host", "0.0.0.0", "--port", "8000"]

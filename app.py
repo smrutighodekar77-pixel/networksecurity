@@ -96,7 +96,4 @@ async def predict_route(file: UploadFile = File(...)):
         logging.error(e)
         return JSONResponse(status_code=500, content={"error": str(e)})
 
-if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=8080)
 
-# trigger pipeline
