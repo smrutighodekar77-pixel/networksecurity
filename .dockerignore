@@ -1,0 +1,15 @@
+venv/
+Artifacts/
+notebooks/
+logs/
+__pycache__/
+.git/
+.gitignore
+*.pyc
+*.pkl
+*.csv
+prediction_output/
+saved_models/
+venv/
+
+.DS_Store
