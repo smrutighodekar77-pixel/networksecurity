@@ -15,11 +15,13 @@ from networksecurity.pipeline.training_pipeline import TrainingPipeline
 from networksecurity.exception.exception import NetworkSecurityException
 from networksecurity.logging.logger import logging
 
+import uvicorn
+
 # Load environment variables
 load_dotenv()
 mongo_db_url = os.getenv("MONGODB_URL_KEY")
 
-# MongoDB (optional – do NOT crash app if missing)
+# MongoDB (optional)
 if mongo_db_url:
     import pymongo
     ca = certifi.where()
@@ -39,7 +41,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Global model variable
 network_model = None
 
 def load_model():
@@ -47,16 +48,12 @@ def load_model():
     try:
         preprocessor = load_object("final_model/preprocessor.pkl")
         model = load_object("final_model/model.pkl")
-        network_model = NetworkModel(
-            preprocessor=preprocessor,
-            model=model
-        )
-        logging.info("Model and preprocessor loaded successfully")
+        network_model = NetworkModel(preprocessor, model)
+        logging.info("Model loaded successfully")
     except Exception as e:
         logging.error(f"Model loading failed: {e}")
         network_model = None
 
-# Load model at startup
 load_model()
 
 @app.get("/")
@@ -68,11 +65,8 @@ def train_route():
     try:
         pipeline = TrainingPipeline()
         pipeline.run_pipeline()
-
-        # Reload model after training
         load_model()
-
-        return {"status": "Training completed and model reloaded"}
+        return {"status": "Training completed"}
     except Exception as e:
         raise NetworkSecurityException(e, sys)
 
@@ -80,35 +74,19 @@ def train_route():
 async def predict_route(file: UploadFile = File(...)):
     try:
         if network_model is None:
-            return JSONResponse(
-                status_code=500,
-                content={"error": "Model not loaded. Run /train first."}
-            )
+            return JSONResponse(status_code=500, content={"error": "Model not loaded"})
 
         contents = await file.read()
-
-        if not contents:
-            return JSONResponse(
-                status_code=400,
-                content={"error": "Uploaded CSV is empty"}
-            )
-
         df = pd.read_csv(io.StringIO(contents.decode("utf-8")))
 
         predictions = network_model.predict(df)
-
-        # Add prediction column
         df["prediction"] = predictions
 
-        # Save output
-        output_dir = "prediction_output"
-        os.makedirs(output_dir, exist_ok=True)
-
-        output_path = os.path.join(output_dir, "output.csv")
+        os.makedirs("prediction_output", exist_ok=True)
+        output_path = "prediction_output/output.csv"
         df.to_csv(output_path, index=False)
 
         return {
-            "status": "success",
             "rows": len(df),
             "output_file": output_path,
             "predictions": predictions.tolist()
@@ -116,10 +94,7 @@ async def predict_route(file: UploadFile = File(...)):
 
     except Exception as e:
         logging.error(e)
-        return JSONResponse(
-            status_code=500,
-            content={"error": str(e)}
-        )
+        return JSONResponse(status_code=500, content={"error": str(e)})
 
-if __name__=="__main__":
-    app_run(app,host="0.0.0.0",port=8000)
+if __name__ == "__main__":
+    uvicorn.run(app, host="0.0.0.0", port=8080)
