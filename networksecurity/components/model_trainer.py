@@ -35,11 +35,18 @@ from networksecurity.utils.ml_utils.model.estimator import NetworkModel
 
 
 # DagsHub MLflow initialization (ONLY this)
-dagshub.init(
-    repo_owner="smrutighodekar77-pixel",
-    repo_name="networksecurity",
-    mlflow=True,
-)
+
+
+AUTH_ENABLED = os.getenv("AUTH_ENABLED", "true").lower() == "true"
+
+if AUTH_ENABLED:
+    import dagshub
+    dagshub.init(
+        repo_owner="YOUR_USERNAME",
+        repo_name="YOUR_REPO",
+        mlflow=True
+    )
+
 
 
 class ModelTrainer:
