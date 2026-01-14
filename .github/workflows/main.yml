@@ -63,41 +63,43 @@ jobs:
           docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
 
   continuous_deployment:
-    name: Continuous Deployment
-    needs: build_and_push_ecr_image
-    runs-on: self-hosted
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v3
+  name: Continuous Deployment
+  needs: build_and_push_ecr_image
+  runs-on: self-hosted
 
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v1
-        with:
-          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: ${{ secrets.AWS_REGION }}
+  steps:
+    - name: Checkout Code
+      uses: actions/checkout@v3
 
-      - name: Login to Amazon ECR
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+    - name: Configure AWS credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ secrets.AWS_REGION }}
 
-      - name: Pull latest Docker image
-        run: |
-          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY_NAME }}
-          IMAGE_TAG=latest
-          docker pull $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    - name: Login to Amazon ECR
+      id: login-ecr
+      uses: aws-actions/amazon-ecr-login@v1
 
-      - name: Run Docker container
-        run: |
-          ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY_NAME }}
-          IMAGE_TAG=latest
-          docker run -d -p 8080:8080 --ipc="host" --name networksecurity \
-            -e AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }} \
-            -e AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }} \
-            -e AWS_REGION=${{ secrets.AWS_REGION }} \
-            $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+    - name: Pull latest Docker image
+      run: |
+        ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY_NAME }}
+        docker pull $ECR_REGISTRY/$ECR_REPOSITORY:latest
 
-      - name: Clean previous images and containers
-        run: docker system prune -f
+    - name: Stop and remove old container
+      run: |
+        docker stop networksecurity || true
+        docker rm networksecurity || true
+
+    - name: Run Docker container
+      run: |
+        ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
+        ECR_REPOSITORY=${{ secrets.ECR_REPOSITORY_NAME }}
+
+        docker run -d \
+          --name networksecurity \
+          -p 8080:8000 \
+          --restart always \
+          $ECR_REGISTRY/$ECR_REPOSITORY:latest
