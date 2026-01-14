@@ -131,3 +131,13 @@ Hands-on AWS deployment experience
 
 Bridged gap between ML and DevOps
 
+
+🚀 Live Application
+🔗 Swagger UI (Live on AWS)
+http://44.222.243.29:8080/docs
+
+
+🔗 GitHub Repository
+https://github.com/smrutighodekar77-pixel/networksecurity
+
+
